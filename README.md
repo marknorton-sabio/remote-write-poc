@@ -31,3 +31,7 @@ Editing the example script to have the remote write endpoint of `"https://metric
 Access to this environment is granted via Github and membership of the Sabio Engineering Product team. Set the data source dropdown to Metrics GCDC to visualise metrics.
 
 ![grafana visualisation of the sample metric added to Mimir via remote write](doc-images/some-value-mimir.png "some_value metric in Grafana/Mimir")
+
+## Dependencies
+
+The remote-write functionality is provided via the [prometheus-remote-write](https://www.npmjs.com/package/prometheus-remote-write) package and has been tested with Prometheus v3.0.0 and [mimir 4.5.0](https://github.com/grafana/helm-charts/releases/tag/mimir-distributed-4.5.0)
