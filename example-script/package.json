@@ -1,0 +1,17 @@
+{
+  "name": "remote-write",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "node-fetch": "^2.7.0",
+    "prometheus-remote-write": "^0.4.1"
+  }
+}

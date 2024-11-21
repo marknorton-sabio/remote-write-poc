@@ -1,0 +1,42 @@
+global:
+  scrape_interval: 15s # By default, scrape targets every 15 seconds.
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+    monitor: "dev-stack"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "prometheus"
+
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 10s
+
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: "random-metrics"
+    scrape_interval: 15s
+    static_configs:
+      - targets: ["random-metrics:8080"]
+        labels:
+          fqdn: random-metrics
+
+#- url: https://6ce6-82-28-211-92.ngrok-free.app/api/v1/write
+
+remote_write:
+- url: http://prometheus-receive:9090/api/v1/write
+  name: central
+  headers:
+    X-Scope-OrgID: gcdc
+  queue_config:
+    capacity: 2500
+    max_shards: 200
+    min_shards: 1
+    max_samples_per_send: 500
+    batch_send_deadline: 5s
+    min_backoff: 30ms
+    max_backoff: 100ms

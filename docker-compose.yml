@@ -1,0 +1,71 @@
+networks:
+  monitoring:
+
+services:
+  random-metrics:
+    build: random-metrics
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://random-metrics:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    ports:
+      - 8080:8080
+    networks:
+      - monitoring
+
+  prometheus-scrape:
+    image: prom/prometheus:v3.0.0-rc.1
+    command:
+      - '--config.file=/etc/prometheus/prometheus-scrape.yml'
+      - '--web.enable-remote-write-receiver'
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus:/etc/prometheus
+    networks:
+      - monitoring
+
+  prometheus-receive:
+    image: prom/prometheus:v3.0.0-rc.1
+    command:
+      - '--config.file=/etc/prometheus/prometheus-receive.yml'
+      - '--web.enable-remote-write-receiver'
+    ports:
+      - 9091:9090
+    volumes:
+      - ./prometheus:/etc/prometheus
+    networks:
+      - monitoring
+
+  postgres:
+    image: postgres:12.21
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    env_file:
+      - environment/.pgenv
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:11.3.1
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+      - ./grafana/provisioning:/provisioning
+    env_file:
+      - environment/.gfenv
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - monitoring

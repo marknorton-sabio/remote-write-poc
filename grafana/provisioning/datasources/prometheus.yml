@@ -1,0 +1,24 @@
+apiVersion: 1
+
+datasources:
+  - name: "realtime"
+    type: "prometheus"
+    orgId: 1
+    url: "http://prometheus-scrape:9090"
+    isDefault: true
+    version: 3
+    editable: false
+    jsonData:
+      httpMethod: "GET"
+      scrapeinterval: 15s
+
+  - name: "receiver"
+    type: "prometheus"
+    orgId: 1
+    url: "http://prometheus-receive:9090"
+    isDefault: false
+    version: 3
+    editable: false
+    jsonData:
+      httpMethod: "GET"
+      scrapeinterval: 15s
