@@ -12,7 +12,7 @@ Example script to demonstrate pushing ad-hoc metrics into Mimir/Prometheus.
 
 ## Test Environment
 
-The `docker-compose.yml` will provision the following test environment:
+The `docker-compose.yml` will provision the following test environment with `docker-compose up`:
 
 ![docker compose test environment consisting of random metrics generator, two prometheus instances, grafana, and postgres](doc-images/remote-write-poc-min2.svg "Test Environment")
 
